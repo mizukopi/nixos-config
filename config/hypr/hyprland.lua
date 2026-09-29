@@ -57,6 +57,7 @@ local menu        = "rofi -show drun"
 --
 hl.on("hyprland.start", function ()
     hl.exec_cmd("wayle panel start")
+    hl.exec_cmd("systemctl --user start hyprpolkitagent")
 --   hl.exec_cmd("nm-applet")
 --   hl.exec_cmd("waybar & hyprpaper & firefox")
 end)
