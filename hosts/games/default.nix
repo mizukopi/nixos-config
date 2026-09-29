@@ -2,7 +2,6 @@
 # desktop pc — gaming/multimedia
 {
   pkgs,
-  inputs,
   ...
 }:
 
@@ -19,7 +18,6 @@
     ../../modules/programs/office.nix
     ../../modules/programs/apps.nix
     ../../modules/programs/spicetify.nix
-    inputs.spicetify-nix.nixosModules.spicetify
   ];
 
   networking.hostName = "games";

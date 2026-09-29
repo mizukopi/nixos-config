@@ -6,6 +6,9 @@ let
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
 in
 {
+  # le module spicetify-nix est importe ici : ce fichier est autonome
+  imports = [ inputs.spicetify-nix.nixosModules.spicetify ];
+
   programs.spicetify = {
     enable = true;
 
