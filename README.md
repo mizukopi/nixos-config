@@ -29,9 +29,9 @@ the main per-host differences:
 
 - **navi** enables power management and ships `powertop`. its hidpi panel runs at
   hyprland scale 1.8.
-- **games** pulls the nvidia proprietary driver (closed module, stable branch),
+- **games** pulls the nvidia driver (open kernel module, stable branch),
   steam with proton-ge, coolercontrol with the `nct6775` kernel module, and
-  spicetify. its monitor is forced to `2560x1440@360` at scale 1.07.
+  spicetify. its monitor is forced to `2560x1440@360` at scale 1.0.
 - on both nixos hosts, **wayle** (the status bar) reads a different
   `config.toml`, selected through a custom module option
   (`fyrr.wayle.configFile`) declared in `modules/desktop/hjem.nix`.
@@ -173,7 +173,7 @@ installing them system-wide.
 - terminal: wezterm
 - shell: nushell (login shell), starship prompt
 
-`mainMod` is bound to `ALT` rather than `SUPER`
+`mainMod` is `SUPER` on navi and `ALT` on games (60% keyboard, no super key).
 
 ## system
 
@@ -187,13 +187,12 @@ installing them system-wide.
 
 ## known gaps
 
-- **no secrets management.** `recipents.txt` (note the typo) holds an orphan age
-  public key from an abandoned sops-nix attempt. sops-nix is the intended fix.
+- **no secrets management.** sops-nix is the intended fix.
 - **no ci committed.** `just check` describes itself as mirroring ci, but no
   workflow exists in the repo yet.
 - **`just check` does not build the hosts**, it only checks formatting and
   lints. a broken host config passes.
-- **theming is only half declarative.** kitty, rofi and spicetify still carry
+- **theming is only half declarative.** kitty, rofi, spicetify and wayle still carry
   hand-written colour files instead of reading `theme.nix`.
-- **git identity is not declared** anywhere in the config, and the history
-  carries several author names.
+- **git history carries several author names.** the identity itself is now
+  declared in `config/git/config`, linked by hjem.
