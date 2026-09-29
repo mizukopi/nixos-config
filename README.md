@@ -7,7 +7,7 @@
 
 three machines share this repo: two nixos hosts and one macbook under
 nix-darwin. dotfiles are managed by [hjem](https://github.com/feel-co/hjem) in
-symlink-only mode, native config files in `config/` are the single source of
+symlink-only mode: native config files in `config/` are the single source of
 truth, and hjem just links them into place.
 
 ## foreword
@@ -22,22 +22,24 @@ reflects where i was in the learning curve when i made it.
 | name | machine | platform | gpu | role |
 |---|---|---|---|---|
 | `navi` | thinkpad x1 carbon gen 12 (meteor lake) | nixos | intel arc (integrated) | learning machine, laptop |
-| `games` | asus tuf gaming h770-pro, i7-13700kf | nixos | nvidia rtx 4070 | desktop, gaming |
+| `games` | asus tuf gaming h770-pro, i7-13700kf | nixos | nvidia rtx 4070 | desktop, gaming, dual boot with windows |
 | `sommei` | macbook pro (m1 pro) | nix-darwin (`aarch64-darwin`) | — | multimedia daily driver |
 
-the main per-host differences:
+| | navi | games |
+|---|---|---|
+| hyprland scale / mode | 1.8 / preferred | 1.0 / `2560x1440@360` |
+| keyboard | `us,fr` | `fr` only |
+| `mainMod` | `SUPER` | `ALT` (60% keyboard, no super key) |
+| wayle config | `config/wayle/config-navi.toml` | `config/wayle/config-games.toml` |
+| extras | power management, `powertop` | nvidia (open kernel module, stable branch), steam + proton-ge, coolercontrol (`nct6775`), spicetify |
 
-- **navi** enables power management and ships `powertop`. its hidpi panel runs at
-  hyprland scale 1.8.
-- **games** pulls the nvidia driver (open kernel module, stable branch),
-  steam with proton-ge, coolercontrol with the `nct6775` kernel module, and
-  spicetify. its monitor is forced to `2560x1440@360` at scale 1.0.
-- on both nixos hosts, **wayle** (the status bar) reads a different
-  `config.toml`, selected through a custom module option
-  (`fyrr.wayle.configFile`) declared in `modules/desktop/hjem.nix`.
-- **sommei** runs macos. nix-darwin handles the declarative system config, and
-  homebrew — itself installed and pinned by nix-homebrew — covers the gui casks
-  that nix handles poorly on mac.
+per-host values in `hyprland.lua` are picked by reading `/etc/hostname`. the
+wayle file is selected through a custom option, `fyrr.wayle.configFile`,
+declared in `modules/desktop/hjem.nix`.
+
+**sommei** runs macos. nix-darwin handles the declarative system config, and
+homebrew — itself installed and pinned by nix-homebrew — covers the gui casks
+that nix handles poorly on mac.
 
 ## structure
 
@@ -54,32 +56,34 @@ nixos-config/
 │   ├── games/{default,hardware}.nix
 │   └── sommei/default.nix
 ├── modules/
-│   ├── core/              # boot, locale, networking, nix daemon, users
+│   ├── core/              # boot, locale, nix daemon, zram, networking, users (no gui)
 │   ├── desktop/           # hyprland, sddm, audio, fonts, cursor, printing, hjem
 │   ├── hardware/          # intel, nvidia, bluetooth
-│   └── programs/          # cli, apps, office, gaming, spicetify
-└── config/                # native dotfiles (hyprland.lua, kitty.conf, ...)
+│   └── programs/          # cli, apps (all gui apps), office, gaming, spicetify
+└── config/                # native dotfiles (hyprland.lua, wayle, kitty, ...)
 ```
 
-modules are opt-in: each host imports only what it needs. `modules/desktop`
-groups the shared graphical stack for the nixos hosts, while
-`modules/desktop/hjem.nix` declares their dotfile symlinks. the darwin host
-declares its own hjem block inline, since its paths and its subset of tools
-differ.
+modules are opt-in: each host imports only what it needs, and a module imports
+its own dependencies (e.g. `spicetify.nix` pulls the spicetify-nix module
+itself). shared modules propose values with `lib.mkDefault`; a host overrides
+them plainly, `lib.mkForce` stays for real emergencies.
+
+the darwin host declares its own hjem block inline, since its paths and its
+subset of tools differ.
 
 ## flake inputs
 
 | input | purpose |
 |---|---|
-| `nixpkgs` | unstable channel |
+| `nixpkgs` | `nixos-unstable` (also used by `sommei`) |
 | `nix-darwin` | macos system management for `sommei` |
 | `hjem` | dotfile symlinks |
 | `nix-homebrew` | installs and pins homebrew itself on `sommei` |
 | `spicetify-nix` | patched spotify on `games` |
 | `treefmt-nix` | formatter + `nix flake check` gate |
 
-all inputs follow the same `nixpkgs`, so there is only one nixpkgs in the
-closure.
+every input that has a `nixpkgs` or `nix-darwin` input follows ours, so there is
+a single copy of each in the lock.
 
 ## theming
 
@@ -90,22 +94,20 @@ the 16 ansi colours, so any consumer that interpolates `theme.palette.<key>`
 rethemes automatically.
 
 the file is imported once in `flake.nix` and threaded to every host through
-`specialArgs` as `theme`. `wezterm.lua` is generated from it with
-`pkgs.writeText`, so no colour is hardcoded there. other tools (kitty, rofi,
-spicetify) still carry their own static theme files — migrating them is on the
-list.
+`specialArgs` as `theme`. `wezterm.lua`, `hyprlock.conf` and `hypr-theme.lua`
+(hyprland border colours) are generated from it with `pkgs.writeText`.
 
 ## daily workflow
 
 `just` is the entry point. run it with no argument to list the recipes.
 
 ```sh
-just switch    # rebuild + activate this host
-just build     # build only, no activation
+just switch    # rebuild + activate this host (asks for sudo)
+just build     # build only, no activation, no sudo
 just fmt       # run nixfmt over every .nix file (writes)
 just lint      # statix + deadnix
 just check     # format check + lint, mirrors what ci should do
-just update    # nix flake update
+just update    # nix flake update (bumps every input)
 ```
 
 the recipes detect the platform with `uname` and the machine name on their own,
@@ -117,8 +119,15 @@ derivation that formats a copy of the sources in the nix sandbox and fails on
 any diff — it can never write to the repo. so the loop is:
 
 ```
-edit → just fmt → just check → commit → just switch
+git pull --rebase → edit → just fmt → just check → just build → commit → just switch
 ```
+
+two habits worth keeping:
+
+- **after a refactor**, `nix store diff-closures /run/current-system ./result`
+  must print nothing: same system, cleaner code.
+- **before an update lands**, the same command lists every package whose version
+  changes.
 
 ### rebuilding by hand
 
@@ -126,12 +135,28 @@ edit → just fmt → just check → commit → just switch
 # nixos (navi, games)
 sudo nixos-rebuild switch --flake .#<hostname>
 
-# darwin (sommei)
+# darwin (sommei) — activation must run as root
 sudo darwin-rebuild switch --flake .#sommei
 ```
 
 on macos the flake attribute must match `scutil --get LocalHostName`, not the
 output of `hostname` — that one can be overwritten by dhcp or mdns.
+
+`nix flake lock` adjusts the lock after editing `inputs` without bumping
+anything else; `nix flake update` bumps everything.
+
+### is this host in sync with the repo?
+
+```sh
+just build
+readlink -f /run/current-system              # running system
+readlink -f result                           # what the repo builds
+readlink -f /nix/var/nix/profiles/system     # what the next boot starts
+```
+
+all three paths identical = the machine is exactly the repo, now and after a
+reboot. if a rebuild breaks the boot, pick the previous generation in the
+systemd-boot menu.
 
 ### development shell
 
@@ -142,45 +167,80 @@ nix develop
 gives `nixd` (language server), `nixfmt`, `statix`, `deadnix` and `just` without
 installing them system-wide.
 
+## state that nix does not manage
+
+a fresh install brings back the config, not this. redo it by hand:
+
+| what | where | how |
+|---|---|---|
+| tailscale identity | `/var/lib/tailscale` | `sudo tailscale up` |
+| mullvad lan sharing | mullvad settings | `mullvad lan set allow` (otherwise tailscale goes through a derp relay when mullvad is on) |
+| windows clock (`games` dual boot) | windows registry | `RealTimeIsUniversal = 1` so both os read the rtc as utc |
+| wayle gui tweaks | `~/.config/wayle/runtime.toml` | copy what is worth keeping into `config/wayle/config-<host>.toml` |
+| ssh keys | `~/.ssh` | regenerate and add to github |
+| game prefixes | `~/Games`, steam library | reinstall from steam / lutris |
+
 ## gotchas
 
+**nix and flakes**
+
 - **flakes only see git-tracked files.** after creating a file, `git add` before
-  rebuilding — including any new source referenced from the config, or nix fails
-  with `Path '...' does not exist in the Git repository`.
+  rebuilding, or nix fails with `Path '...' does not exist in the Git repository`.
+- **read nix errors from the bottom.** look for `Failed assertions:` or the last
+  `error:`; everything above is the evaluation trace.
+- **`permittedInsecurePackages` pins an exact version** and silently stops
+  applying at the next bump.
+- **deadnix flags unused arguments** (`{ pkgs, lib, ... }:`). removing the last
+  use of `lib` or `inputs` means removing it from the header too.
+- **bootstrapping a tool that drives rebuilds** is circular: adding `just` to a
+  host's packages does nothing until a rebuild has run. break the loop once with
+  `nix run nixpkgs#just -- switch`.
+
+**dotfiles (hjem)**
+
 - **hjem links point into the nix store**, not into the live repo. editing a
-  dotfile and reloading the tool is not enough; the change only lands after a
-  rebuild.
+  dotfile and reloading the tool is not enough; the change lands after a rebuild.
+  hyprland needs a full logout, `hyprctl reload` does not re-read the lua.
 - **hjem links files, not directories**, so it does not clobber things like
   fish's `conf.d/` or `functions/`.
-- **bootstrapping a tool that drives rebuilds** is circular: adding `just` to a
-  host's packages does nothing until a rebuild has run, and the rebuild is what
-  `just` was supposed to launch. break the loop once by hand, or with
-  `nix run nixpkgs#just -- switch`.
-- **zen (browser) rewrites its own `profiles.ini`**, so it cannot be symlinked
-  from the read-only store. an idempotent activation script on `sommei` seeds it
-  once with a fixed profile directory name, otherwise zen picks eight random
-  characters and the declared `user.js` points nowhere.
-- **wayle writes its own `runtime.toml`** when a setting changes in
-  `wayle-settings`, replacing any symlink with a real file. only `config.toml`
-  is declared; copy gui tweaks worth keeping into `config/wayle/config-<host>.toml`.
+- **never declare a file the app rewrites itself.** the app replaces the symlink
+  with a real file and the next rebuild conflicts with it. seen with zen's
+  `profiles.ini` (seeded once by an activation script on `sommei`) and wayle's
+  `runtime.toml` (left to wayle, only `config.toml` is declared).
+
+**desktop**
+
+- **hyprland ignores `services.xserver.xkb`.** the session keyboard lives in
+  `hyprland.lua`; the xkb option only covers sddm.
+- **keybinds on digits use keycodes** (`code:10` … `code:19`). on azerty the
+  unshifted top row is `& é " ...`, so `mainMod + 1` would never fire.
+- **the nixos hyprland wrapper grants `cap_sys_nice`**, which puts glibc in
+  secure mode: it strips `TZDIR` (and makes the process unreadable in `/proc`).
+  `hyprland.lua` sets `TZDIR` back, otherwise every app falls back to utc.
+- **hyprland ships no polkit agent.** `hyprpolkitagent` is exposed through
+  `systemd.packages` and started from `hyprland.lua`, since
+  `graphical-session.target` is never reached here.
+- **`TAG+="uaccess"` udev rules must sort before `73-seat-late.rules`.**
+  `services.udev.extraRules` writes `99-local.rules`, too late, so the gaming
+  rules ship as `70-gaming.rules` through `services.udev.packages`.
+- **`pkexec` is not setuid by default** on current nixos
+  (`security.polkit.enablePkexecWrapper`). use `sudo`.
+
+**darwin**
+
 - **`homebrew.onActivation.cleanup = "uninstall"`** removes any cask that is not
   in the declared list. brew now prints a deprecation warning for the underlying
   flag.
 
-## desktop (nixos hosts)
-
-- display manager: sddm, hyprland as default session
-- terminal: wezterm
-- shell: nushell (login shell), starship prompt
-
-`mainMod` is `SUPER` on navi and `ALT` on games (60% keyboard, no super key).
-
 ## system
 
-- network: networkmanager, tailscale (firewall opened for it), mullvad
+- network: networkmanager, systemd-resolved, tailscale (tailnet trusted in the
+  firewall), mullvad (daemon + gui)
+- memory: zram swap (zstd, up to 50 % of ram), no disk swap, no hibernation
+- desktop: sddm → hyprland, wezterm, nushell (login shell) + starship, wayle bar,
+  hyprlock, hyprpolkitagent
 - printing: cups
-- automatic nix garbage collection, weekly, older than 7 days
-- store auto-optimisation
+- nix: weekly garbage collection (older than 7 days), store auto-optimisation
 - locale: `en_US.UTF-8` with french regional settings, timezone `Europe/Paris`
 - `sommei`: touch id for sudo, declarative dock / finder / trackpad / keyboard
   repeat / screenshot settings
@@ -192,7 +252,9 @@ installing them system-wide.
   workflow exists in the repo yet.
 - **`just check` does not build the hosts**, it only checks formatting and
   lints. a broken host config passes.
-- **theming is only half declarative.** kitty, rofi, spicetify and wayle still carry
-  hand-written colour files instead of reading `theme.nix`.
-- **git history carries several author names.** the identity itself is now
-  declared in `config/git/config`, linked by hjem.
+- **theming is only half declarative.** kitty, rofi, spicetify and wayle still
+  carry hand-written colour files instead of reading `theme.nix`.
+- **navi misses laptop services**: no upower / power-profiles-daemon (the wayle
+  battery module needs them) and no intel va-api driver (video decoded on cpu).
+- **git history carries several author names.** the identity itself is declared
+  in `config/git/config`, linked by hjem.
