@@ -18,6 +18,7 @@
     nushell
     ente-auth
     gajim
+    signal-desktop
     equibop
     kitty
     wezterm
