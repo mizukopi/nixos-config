@@ -74,6 +74,9 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")
 hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Ice")
+-- le wrapper nixos donne cap_sys_nice a hyprland : la glibc passe en mode securise
+-- et retire TZDIR des variables. on le remet pour que les applis trouvent le fuseau.
+hl.env("TZDIR", "/etc/zoneinfo")
 
 
 -- this section controls which programs are allowed to perform sensitive operations like screen capture or plugin loading.
