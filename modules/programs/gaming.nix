@@ -17,12 +17,16 @@
     pkgs.lutris
   ];
 
-  # udev rules: nintendo controllers + endgame gear mouse (non-root hid access)
-  services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0337", MODE="0666"
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1978", MODE="0666"
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1976", MODE="0666"
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1966", MODE="0666"
-  '';
+  # udev rules: nintendo controllers + endgame gear mouse
+  # uaccess = acces pour la session active seulement. fichier 70-* car uaccess doit
+  # etre pose avant 73-seat-late.rules (extraRules finit en 99-local.rules : trop tard)
+  services.udev.packages = [
+    (pkgs.writeTextDir "lib/udev/rules.d/70-gaming.rules" ''
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0337", TAG+="uaccess"
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1978", TAG+="uaccess"
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1976", TAG+="uaccess"
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1966", TAG+="uaccess"
+    '')
+  ];
   boot.kernelModules = [ "hid-nintendo" ];
 }
