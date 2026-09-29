@@ -1,5 +1,5 @@
 # module: programs/apps
-# general graphical apps (browser, file manager, media)
+# general graphical apps (browser, file manager, media, terminals, editors, chat)
 { pkgs, ... }:
 
 {
@@ -17,7 +17,16 @@
     obs-studio
     nushell
     ente-auth
+    gajim
+    equibop
+    kitty
+    wezterm
+    zed-editor
+    kdePackages.kate
+    kdePackages.qttools
   ];
+
+  programs.firefox.enable = true;
 
   # file type (mime) → default application associations
   xdg.mime.defaultApplications = {

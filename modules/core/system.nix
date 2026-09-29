@@ -1,5 +1,5 @@
 # module: core/system
-# boot, locale, nix daemon, shared packages, firefox
+# boot, locale, nix daemon, zram, shared cli packages
 { pkgs, ... }:
 
 {
@@ -43,23 +43,14 @@
   # swap compressé en ram (zram) : filet de sécurité quand la ram est pleine, zéro écriture disque
   zramSwap.enable = true;
 
-  programs.firefox.enable = true;
-
   # mounts removable drives (usb sticks); not enabled outside plasma, so i enable it explicitly
   services.udisks2.enable = true;
 
   environment.systemPackages = with pkgs; [
     fastfetch
-    gajim
-    equibop
     git
     unzip
-    kitty
-    wezterm
-    zed-editor
     claude-code
     starship
-    kdePackages.kate
-    kdePackages.qttools
   ];
 }
