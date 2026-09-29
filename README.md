@@ -33,8 +33,8 @@ the main per-host differences:
   steam with proton-ge, coolercontrol with the `nct6775` kernel module, and
   spicetify. its monitor is forced to `2560x1440@360` at scale 1.07.
 - on both nixos hosts, **wayle** (the status bar) reads a different
-  `runtime.toml`, selected through a custom module option
-  (`fyrr.wayle.runtimeFile`) declared in `modules/desktop/hjem.nix`.
+  `config.toml`, selected through a custom module option
+  (`fyrr.wayle.configFile`) declared in `modules/desktop/hjem.nix`.
 - **sommei** runs macos. nix-darwin handles the declarative system config, and
   homebrew — itself installed and pinned by nix-homebrew — covers the gui casks
   that nix handles poorly on mac.
@@ -160,6 +160,9 @@ installing them system-wide.
   from the read-only store. an idempotent activation script on `sommei` seeds it
   once with a fixed profile directory name, otherwise zen picks eight random
   characters and the declared `user.js` points nowhere.
+- **wayle writes its own `runtime.toml`** when a setting changes in
+  `wayle-settings`, replacing any symlink with a real file. only `config.toml`
+  is declared; copy gui tweaks worth keeping into `config/wayle/config-<host>.toml`.
 - **`homebrew.onActivation.cleanup = "uninstall"`** removes any cask that is not
   in the declared list. brew now prints a deprecation warning for the underlying
   flag.

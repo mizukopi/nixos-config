@@ -112,9 +112,9 @@ let
   '';
 in
 {
-  options.fyrr.wayle.runtimeFile = lib.mkOption {
+  options.fyrr.wayle.configFile = lib.mkOption {
     type = lib.types.path;
-    description = "chemin du runtime.toml de wayle, spécifique au host";
+    description = "config.toml de wayle propre au host (runtime.toml reste inscriptible par wayle)";
   };
 
   config = {
@@ -137,9 +137,8 @@ in
 
         ".config/starship.toml".source = ../../config/starship/starship.toml;
 
-        ".config/wayle/runtime.toml".source = config.fyrr.wayle.runtimeFile;
         ".config/wayle/tombi.toml".source = ../../config/wayle/tombi.toml;
-        ".config/wayle/config.toml".source = ../../config/wayle/config.toml;
+        ".config/wayle/config.toml".source = config.fyrr.wayle.configFile;
         ".config/wayle/schema.json".source = ../../config/wayle/schema.json;
 
         ".config/git/config".source = ../../config/git/config;

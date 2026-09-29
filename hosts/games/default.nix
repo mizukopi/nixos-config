@@ -27,7 +27,7 @@
   console.keyMap = "fr";
   # dual boot : la rtc reste en utc. côté windows, clé registre RealTimeIsUniversal = 1
   services.xserver.xkb.layout = lib.mkForce "fr";
-  fyrr.wayle.runtimeFile = ../../config/wayle/runtime-games.toml;
+  fyrr.wayle.configFile = ../../config/wayle/config-games.toml;
 
   boot.kernelModules = [ "nct6775" ];
 
