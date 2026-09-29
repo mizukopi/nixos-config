@@ -127,7 +127,7 @@ edit → just fmt → just check → commit → just switch
 sudo nixos-rebuild switch --flake .#<hostname>
 
 # darwin (sommei)
-darwin-rebuild switch --flake .#sommei
+sudo darwin-rebuild switch --flake .#sommei
 ```
 
 on macos the flake attribute must match `scutil --get LocalHostName`, not the

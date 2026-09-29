@@ -8,7 +8,7 @@ default:
 # rebuild + switch ce host
 switch:
     @if [ "$(uname)" = "Darwin" ]; then \
-        darwin-rebuild switch --flake {{flake}}#$(scutil --get LocalHostName); \
+        sudo darwin-rebuild switch --flake {{flake}}#$(scutil --get LocalHostName); \
     else \
         sudo nixos-rebuild switch --flake {{flake}}#$(hostname); \
     fi
@@ -18,7 +18,7 @@ build:
     @if [ "$(uname)" = "Darwin" ]; then \
         darwin-rebuild build --flake {{flake}}#$(scutil --get LocalHostName); \
     else \
-        sudo nixos-rebuild build --flake {{flake}}#$(hostname); \
+        nixos-rebuild build --flake {{flake}}#$(hostname); \
     fi
 
 # formate tous les fichiers nix
