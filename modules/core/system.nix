@@ -40,6 +40,9 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # swap compressé en ram (zram) : filet de sécurité quand la ram est pleine, zéro écriture disque
+  zramSwap.enable = true;
+
   programs.firefox.enable = true;
 
   # mounts removable drives (usb sticks); not enabled outside plasma, so i enable it explicitly
