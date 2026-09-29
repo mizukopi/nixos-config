@@ -28,5 +28,9 @@
       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3367", ATTRS{idProduct}=="1966", TAG+="uaccess"
     '')
   ];
-  boot.kernelModules = [ "hid-nintendo" ];
+  # ntsync : primitives de sync windows cote noyau, utilisees par proton-ge (/dev/ntsync)
+  boot.kernelModules = [
+    "hid-nintendo"
+    "ntsync"
+  ];
 }
