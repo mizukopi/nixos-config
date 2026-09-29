@@ -245,7 +245,7 @@ hl.config({
 
 hl.config({
     input = {
-        kb_layout = "us,fr",
+        kb_layout = hostname == "games" and "fr" or "us,fr", -- games : azerty uniquement
         kb_variant = "",
         kb_model   = "",
         kb_options = "",
@@ -287,7 +287,7 @@ end
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = "ALT" -- Sets "Windows" key as main modifier
+local mainMod = hostname == "games" and "ALT" or "SUPER" -- games : clavier 60% sans touche super
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
