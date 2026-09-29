@@ -1,12 +1,12 @@
 # module: core/networking
 # networkmanager + tailscale + mullvad + firewall rules
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   networking.networkmanager.enable = true;
 
   services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+  services.mullvad-vpn.gui.enable = true;
   services.resolved.enable = true;
 
   services.tailscale.enable = true;
