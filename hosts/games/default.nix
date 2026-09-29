@@ -32,7 +32,6 @@
   boot.kernelModules = [ "nct6775" ];
 
   programs.coolercontrol.enable = true;
-  nixpkgs.config.permittedInsecurePackages = [ "electron-39.8.10" ];
 
   system.stateVersion = "25.11";
   environment.systemPackages = with pkgs; [
