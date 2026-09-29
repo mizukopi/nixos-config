@@ -24,6 +24,7 @@
     zed-editor
     kdePackages.kate
     kdePackages.qttools
+    kdePackages.kdenlive
   ];
 
   programs.firefox.enable = true;

@@ -23,7 +23,6 @@
   powerManagement.enable = true;
 
   environment.systemPackages = with pkgs; [
-    kdePackages.kdenlive
     powertop
   ];
 

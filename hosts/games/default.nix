@@ -35,7 +35,6 @@
 
   system.stateVersion = "25.11";
   environment.systemPackages = with pkgs; [
-    kdePackages.kdenlive
     (rustPlatform.buildRustPackage {
       pname = "egctl";
       version = "unstable";
