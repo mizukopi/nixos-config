@@ -17,8 +17,9 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
 
-    # closed proprietary driver (more mature than the open module)
-    open = false;
+    # module noyau open : recommande par nvidia depuis la branche 560 pour turing
+    # et plus recent (rtx 4070 = ada). le userspace reste proprietaire
+    open = true;
 
     # nvidia-settings gui to tune fans, clocks, etc.
     nvidiaSettings = true;
