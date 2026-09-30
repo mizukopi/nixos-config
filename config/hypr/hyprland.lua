@@ -254,6 +254,7 @@ hl.config({
         kb_model   = "",
         kb_options = "",
         kb_rules   = "",
+        numlock_by_default = true, -- verr num actif au demarrage de la session
         follow_mouse = 1,
 
         sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
