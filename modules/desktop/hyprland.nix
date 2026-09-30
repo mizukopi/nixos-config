@@ -10,6 +10,11 @@
   # defaut sous hyprland. on rend son unite systemd dispo, lancee depuis hyprland.lua
   systemd.packages = [ pkgs.hyprpolkitagent ];
 
+  # coffre a secrets (org.freedesktop.secrets) absent sous hyprland : ente auth, signal,
+  # brave... y rangent leurs cles. deverrouille a la connexion sddm avec le mot de passe
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
+
   environment.systemPackages = with pkgs; [
     rofi
     brightnessctl
