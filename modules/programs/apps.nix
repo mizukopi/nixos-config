@@ -1,6 +1,6 @@
 # module: programs/apps
 # general graphical apps (browser, file manager, media, terminals, editors, chat)
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -17,6 +17,8 @@
     obs-studio
     nushell
     ente-auth
+    # zen absent de nixpkgs : flake communautaire (binaire officiel de zen, repackage)
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     gajim
     signal-desktop
     equibop
