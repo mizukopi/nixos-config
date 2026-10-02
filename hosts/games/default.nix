@@ -12,6 +12,7 @@
     ../../modules/desktop
     ../../modules/desktop/hjem.nix
     ../../modules/hardware/nvidia.nix
+    ../../modules/hardware/health.nix
     ../../modules/hardware/bluetooth.nix
     ../../modules/programs/cli.nix
     ../../modules/programs/gaming.nix
