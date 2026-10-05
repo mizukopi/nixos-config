@@ -20,7 +20,6 @@
     gajim
     signal-desktop
     equibop
-    kitty
     wezterm
     zed-editor
     kdePackages.kate
