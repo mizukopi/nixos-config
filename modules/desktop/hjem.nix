@@ -124,6 +124,7 @@ in
         ".config/hypr/hyprland.lua".source = ../../config/hypr/hyprland.lua;
         ".config/hypr/hypr-theme.lua".source = hyprThemeLua;
         ".config/hypr/hyprlock.conf".source = hyprlockConf;
+        ".config/hypr/hypridle.conf".source = ../../config/hypr/hypridle.conf;
 
         ".config/kitty/kitty.conf".source = ../../config/kitty/kitty.conf;
         ".config/kitty/themes/eva24.conf".source = ../../config/kitty/themes/eva24.conf;
