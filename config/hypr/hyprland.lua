@@ -397,17 +397,17 @@ hl.window_rule({
 hl.window_rule({
     name      = "assign-brave-workspace",
     match     = { class = "^(brave-browser)$" },
-    workspace = "3 silent",
+    workspace = "2 silent",
 })
 
 hl.window_rule({
     name      = "assign-equibop-workspace",
     match     = { class = "^(equibop)$" },
-    workspace = "2 silent",
+    workspace = "3 silent",
 })
 
 hl.window_rule({
     name      = "assign-gajim-workspace",
     match     = { class = "^(org.gajim.Gajim)$" },
-    workspace = "2 silent",
+    workspace = "3 silent",
 })
