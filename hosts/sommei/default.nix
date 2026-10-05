@@ -37,6 +37,13 @@ in
   # reattach : touch id marche aussi dans tmux / cmux (detaches de la session graphique)
   security.pam.services.sudo_local.reattach = true;
 
+  # pare-feu applicatif macos : bloque les connexions entrantes non autorisees.
+  # stealth mode : pas de reponse aux pings ni aux sondes de ports (wifi public)
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+  };
+
   # fish shell
   programs.fish.enable = true;
   environment.shells = [ pkgs.fish ];
