@@ -1,3 +1,10 @@
 [user]
     name = fyrrmi
     email = 198573042+fyrrmi@users.noreply.github.com
+
+[init]
+    defaultBranch = main
+[pull]
+    rebase = true
+[push]
+    autoSetupRemote = true
