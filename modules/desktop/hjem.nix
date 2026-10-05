@@ -9,12 +9,23 @@
 }:
 
 let
+  # fonds evangelion (github.com/Aleph1-9012/Evangelion), epingles sur un commit precis.
+  # nix ne telecharge que ces 2 images, et verifie leur contenu grace au hash.
+  lockWallpaper = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/Aleph1-9012/Evangelion/fb785c3009a9346173d4b893d6aa36dd22052335/wallpapers/Ayanami-wall.png";
+    hash = "sha256-GdWym23O1irCSb62XTq2EU+9NnhAwE/JW9hVjeMe8M4=";
+  };
+  desktopWallpaper = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/Aleph1-9012/Evangelion/fb785c3009a9346173d4b893d6aa36dd22052335/wallpapers/Ramiel-wall.png";
+    hash = "sha256-OnyTyFxrUVyGyjyG6ZEqdUvIFkDhb3lpSXChBhRrlUI=";
+  };
+
   # hyprlock.conf généré depuis theme.nix — plus de couleurs en dur
   hyprlockConf = pkgs.writeText "hyprlock.conf" ''
     background {
         monitor =
-        blur_passes = 3
-        blur_size = 8
+        path = ${lockWallpaper}
+        blur_passes = 0
     }
 
     input-field {
@@ -125,6 +136,7 @@ in
         ".config/hypr/hypr-theme.lua".source = hyprThemeLua;
         ".config/hypr/hyprlock.conf".source = hyprlockConf;
         ".config/hypr/hypridle.conf".source = ../../config/hypr/hypridle.conf;
+        ".config/hypr/wallpaper.png".source = desktopWallpaper;
 
         ".config/wezterm/wezterm.lua".source = weztermLua;
 
