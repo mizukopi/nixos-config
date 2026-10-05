@@ -251,8 +251,8 @@ a fresh install brings back the config, not this. redo it by hand:
 - **no secrets management.** sops-nix is the intended fix.
 - **no ci committed.** `just check` describes itself as mirroring ci, but no
   workflow exists in the repo yet.
-- **`just check` does not build the hosts**, it only checks formatting and
-  lints. a broken host config passes.
+- **`just check` evaluates the hosts but does not build them**: a wrong option
+  or a typo fails, a package that fails to compile still passes.
 - **theming is only half declarative.** kitty, rofi, spicetify and wayle still
   carry hand-written colour files instead of reading `theme.nix`.
 - **navi misses laptop services**: no upower / power-profiles-daemon (the wayle

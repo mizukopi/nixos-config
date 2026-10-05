@@ -35,6 +35,13 @@ lint:
 check:
     nix build --no-link {{flake}}#checks.$(nix eval --impure --raw --expr 'builtins.currentSystem').formatting
     just lint
+    just eval
+
+# évalue les 3 hosts sans rien construire : attrape options inexistantes et fautes de frappe
+eval:
+    nix eval {{flake}}#nixosConfigurations.navi.config.system.build.toplevel.drvPath
+    nix eval {{flake}}#nixosConfigurations.games.config.system.build.toplevel.drvPath
+    nix eval {{flake}}#darwinConfigurations.sommei.config.system.build.toplevel.drvPath
 
 # met à jour tous les inputs
 update:
