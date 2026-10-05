@@ -253,7 +253,7 @@ hl.config({
         kb_layout = hostname == "games" and "fr" or "us,fr", -- games : azerty uniquement
         kb_variant = "",
         kb_model   = "",
-        kb_options = "",
+        kb_options = hostname == "games" and "caps:super" or "", -- games : caps lock devient super (clavier 60%)
         kb_rules   = "",
         numlock_by_default = true, -- verr num actif au demarrage de la session
         follow_mouse = 1,
@@ -287,7 +287,7 @@ end
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = hostname == "games" and "ALT" or "SUPER" -- games : clavier 60% sans touche super
+local mainMod = "SUPER"
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
