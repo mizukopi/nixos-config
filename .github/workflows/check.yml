@@ -1,0 +1,15 @@
+# ci : rejoue `just check` (format + lint + eval des 3 hosts) a chaque push
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+      - name: just check
+        run: nix shell --inputs-from . nixpkgs#just -c just check

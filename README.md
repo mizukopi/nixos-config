@@ -249,8 +249,6 @@ a fresh install brings back the config, not this. redo it by hand:
 ## known gaps
 
 - **no secrets management.** sops-nix is the intended fix.
-- **no ci committed.** `just check` describes itself as mirroring ci, but no
-  workflow exists in the repo yet.
 - **`just check` evaluates the hosts but does not build them**: a wrong option
   or a typo fails, a package that fails to compile still passes.
 - **theming is only half declarative.** kitty, rofi, spicetify and wayle still
