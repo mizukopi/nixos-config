@@ -43,7 +43,8 @@ let
         }">Password...</span>
         font_color = rgb(${builtins.substring 1 6 theme.palette.text})
         inner_color = rgb(${builtins.substring 1 6 theme.palette.base})
-        outer_color = rgb(${builtins.substring 1 6 theme.accentHex})
+        # bordure du champ de mot de passe : blanc
+        outer_color = rgb(ffffff)
         check_color = rgb(${builtins.substring 1 6 theme.palette.green})
         fail_color = rgb(${builtins.substring 1 6 theme.palette.red})
         shadow_passes = 2
@@ -51,7 +52,7 @@ let
 
     label {
         monitor =
-        text = cmd[update:1000] echo "$(date +'%I:%M')"
+        text = cmd[update:1000] echo "$(date +'%H:%M')"
         color = rgba(${builtins.substring 1 6 theme.accentHex}, 1.0)
         font_size = 24
         font_family = JetBrainsMono Nerd Font
