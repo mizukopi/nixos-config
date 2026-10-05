@@ -20,6 +20,8 @@
     brightnessctl
     wayle
     hyprshot
+    matugen # extrait une palette du fond d ecran (lance par wayle, theme-provider)
+    awww # moteur de fond d ecran pilote par wayle (wayle lance awww-daemon lui-meme)
     playerctl
   ];
 }
