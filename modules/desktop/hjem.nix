@@ -38,7 +38,7 @@ let
         rounding = 0
         dots_center = true
         fade_on_empty = false
-        placeholder_text = <span foreground="#${
+        placeholder_text = <span foreground="##${
           builtins.substring 1 6 theme.palette.subtext0
         }">Password...</span>
         font_color = rgb(${builtins.substring 1 6 theme.palette.text})
