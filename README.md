@@ -29,7 +29,7 @@ reflects where i was in the learning curve when i made it.
 |---|---|---|
 | hyprland scale / mode | 1.8 / preferred | 1.0 / `2560x1440@360` |
 | keyboard | `us,fr` | `fr` only |
-| `mainMod` | `SUPER` | `ALT` (60% keyboard, no super key) |
+| `mainMod` | `SUPER` | `SUPER` via caps lock (`caps:super`, 60% keyboard) |
 | wayle config | `config/wayle/config-navi.toml` | `config/wayle/config-games.toml` |
 | extras | power management, `powertop` | nvidia (open kernel module, stable branch), steam + proton-ge, coolercontrol (`nct6775`), spicetify |
 
