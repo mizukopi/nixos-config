@@ -30,6 +30,9 @@
   # va-api : decodage video par le gpu intel au lieu du cpu
   hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
 
+  # fwupd : mises a jour firmware (bios, thunderbolt, ssd) via lvfs, ou lenovo publie
+  services.fwupd.enable = true;
+
   environment.systemPackages = with pkgs; [
     powertop
   ];
