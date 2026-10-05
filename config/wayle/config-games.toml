@@ -30,6 +30,9 @@ right = [
     "notifications",
 ]
 
+[styling]
+theme-provider = "matugen"
+
 [styling.palette]
 bg = "#0d0a0e"
 surface = "#151019"
@@ -69,7 +72,7 @@ icon-bg-color = "bg-base"
 min-workspace-count = 3
 active-indicator = "underline"
 active-color = "accent"
-occupied-color = "status-error-hover"
+occupied-color = "fg-muted"
 container-bg-color = "bg-base"
 border-show = true
 border-color = "fg-muted"
@@ -111,7 +114,12 @@ button-bg-color = "bg-base"
 location = "Dijon"
 
 [wallpaper]
-engine-enabled = false
+engine-enabled = true
 transition-type = "none"
 cycling-interval-mins = 1440
 cycling-same-image = true
+
+[[wallpaper.monitors]]
+name = "DP-1"
+wallpaper = "/home/paul/.config/hypr/wallpaper.png"
+fit-mode = "fill"
