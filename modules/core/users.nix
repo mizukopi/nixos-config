@@ -13,4 +13,7 @@
     shell = pkgs.nushell;
   };
 
+  # nushell dans /etc/shells (liste des shells de connexion autorises)
+  environment.shells = [ pkgs.nushell ];
+
 }
