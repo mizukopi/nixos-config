@@ -7,7 +7,7 @@
 input_path = "/home/paul/.config/matugen/templates/hypr-colors.lua"
 output_path = "/home/paul/.config/hypr/matugen-colors.lua"
 # applique aussi les couleurs tout de suite, sans reconnexion (hyprctl eval = lua en direct)
-post_hook = '''hyprctl eval 'hl.config({ general = { col = { active_border = { colors = { "rgb({{ colors.primary.default.hex_stripped }})" }, angle = 45 }, inactive_border = "rgb({{ colors.surface_container.default.hex_stripped }})" } } })' > /dev/null 2>&1'''
+post_hook = "sh ~/.config/matugen/apply-hypr-colors.sh"
 
 
 # couleurs de rofi (lanceur d applis) : relu a chaque ouverture, rien a relancer
