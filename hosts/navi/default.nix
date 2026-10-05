@@ -26,6 +26,8 @@
   services.upower.enable = true;
   # profils d energie (economie / equilibre / performance) : powerprofilesctl
   services.power-profiles-daemon.enable = true;
+  # thermald : demon intel qui limite la chauffe du cpu avant le throttling brutal
+  services.thermald.enable = true;
 
   # va-api : decodage video par le gpu intel au lieu du cpu
   hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
