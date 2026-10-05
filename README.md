@@ -238,7 +238,7 @@ a fresh install brings back the config, not this. redo it by hand:
   firewall), mullvad (daemon + gui)
 - memory: zram swap (zstd, up to 50 % of ram), no disk swap, no hibernation
 - desktop: sddm → hyprland, wezterm, nushell (login shell) + starship, wayle bar,
-  hyprlock, hyprpolkitagent
+  hyprlock + hypridle (auto-lock, lock before sleep), hyprpolkitagent
 - printing: cups
 - nix: weekly garbage collection (older than 7 days), store auto-optimisation
 - locale: `en_US.UTF-8` with french regional settings, timezone `Europe/Paris`
@@ -252,7 +252,5 @@ a fresh install brings back the config, not this. redo it by hand:
   or a typo fails, a package that fails to compile still passes.
 - **theming is only half declarative.** kitty, rofi, spicetify and wayle still
   carry hand-written colour files instead of reading `theme.nix`.
-- **navi misses laptop services**: no upower / power-profiles-daemon (the wayle
-  battery module needs them) and no intel va-api driver (video decoded on cpu).
 - **git history carries several author names.** the identity itself is declared
   in `config/git/config`, linked by hjem.
