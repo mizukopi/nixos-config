@@ -22,6 +22,14 @@
   # laptop power management
   powerManagement.enable = true;
 
+  # upower : etat de la batterie pour les autres programmes (module battery de wayle)
+  services.upower.enable = true;
+  # profils d energie (economie / equilibre / performance) : powerprofilesctl
+  services.power-profiles-daemon.enable = true;
+
+  # va-api : decodage video par le gpu intel au lieu du cpu
+  hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
+
   environment.systemPackages = with pkgs; [
     powertop
   ];
