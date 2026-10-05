@@ -43,6 +43,11 @@ eval:
     nix eval {{flake}}#nixosConfigurations.games.config.system.build.toplevel.drvPath
     nix eval {{flake}}#darwinConfigurations.sommei.config.system.build.toplevel.drvPath
 
+# cherche des secrets (cles, tokens, mots de passe) dans tout l historique git.
+# repo public : un secret commite reste lisible dans l historique meme apres suppression.
+scan:
+    nix run --inputs-from {{flake}} nixpkgs#gitleaks -- git {{flake}} --redact --verbose
+
 # met à jour tous les inputs
 update:
     nix flake update
