@@ -4,6 +4,8 @@
 
 {
   boot.loader.systemd-boot.enable = true;
+  # 10 générations max dans le menu de boot : évite de remplir l esp (/boot)
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
   time.timeZone = "Europe/Paris";
