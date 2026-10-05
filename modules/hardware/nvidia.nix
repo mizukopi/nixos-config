@@ -13,8 +13,10 @@
     # required for wayland (hyprland)
     modesetting.enable = true;
 
-    # laptop options, disabled on a desktop running on AC power
+    # enable : sauvegarde la vram pendant la veille (NVreg_PreserveVideoMemoryAllocations).
+    # pas reserve aux portables : a passer a true si fenetres noires ou corrompues au reveil.
     powerManagement.enable = false;
+    # finegrained : eteint le gpu au repos (prime offload), portables hybrides uniquement
     powerManagement.finegrained = false;
 
     # module noyau open : recommande par nvidia depuis la branche 560 pour turing
