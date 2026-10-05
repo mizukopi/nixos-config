@@ -48,6 +48,10 @@ eval:
 scan:
     nix run --inputs-from {{flake}} nixpkgs#gitleaks -- git {{flake}} --redact --verbose
 
+# met a jour un seul input, ex : `just bump nixpkgs`
+bump input:
+    nix flake update {{input}}
+
 # met à jour tous les inputs
 update:
     nix flake update
