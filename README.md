@@ -178,6 +178,7 @@ a fresh install brings back the config, not this. redo it by hand:
 | windows clock (`games` dual boot) | windows registry | `RealTimeIsUniversal = 1` so both os read the rtc as utc |
 | wayle gui tweaks | `~/.config/wayle/runtime.toml` | copy what is worth keeping into `config/wayle/config-<host>.toml` |
 | ssh keys | `~/.ssh` | regenerate and add to github |
+| mumble audio backend (nixos) | `~/.config/Mumble/Mumble/mumble_settings.json` | input/output system = `PulseAudio`, otherwise mumble 1.5 gets SIGKILLed with pipewire >= 1.4 |
 | game prefixes | `~/Games`, steam library | reinstall from steam / lutris |
 
 ## gotchas
