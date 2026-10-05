@@ -1,13 +1,10 @@
-# homebrew formulae (bash, handbrake, mole) — en fin de PATH,
-# nix passe devant en cas de conflit
-set -gx PATH $PATH /opt/homebrew/bin /opt/homebrew/sbin
-# npm global binaries
-set -gx PATH $HOME/.npm-global/bin $PATH
-# Personal scripts
-set -gx PATH $HOME/scripts $PATH
+# PATH : tout est ajoute EN FIN, nix garde la priorite en cas de conflit.
+# fish_add_path ignore les dossiers deja presents (pas de doublons en sous-shell),
+# --global evite d ecrire dans la variable universelle fish_user_paths.
+fish_add_path --global --append /opt/homebrew/bin /opt/homebrew/sbin # homebrew (bash, handbrake, mole)
+fish_add_path --global --append $HOME/.npm-global/bin # npm global
+fish_add_path --global --append $HOME/scripts # scripts perso
+fish_add_path --global --append $HOME/.opencode/bin # opencode
+fish_add_path --global --append $HOME/.local/bin # hermes agent
 
 starship init fish | source
-# opencode
-fish_add_path /Users/user/.opencode/bin
-# Hermes Agent — ensure ~/.local/bin is on PATH
-fish_add_path "$HOME/.local/bin"
