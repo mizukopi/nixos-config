@@ -9,3 +9,6 @@ configuration {
 }
 
 @theme "ayu-dark"
+
+/* couleurs du fond d ecran (generees par matugen), par-dessus celles de ayu-dark */
+@import "~/.config/rofi/matugen-colors.rasi"

@@ -140,6 +140,7 @@ in
 
         ".config/matugen/config.toml".source = ../../config/matugen/config.toml;
         ".config/matugen/templates/hypr-colors.lua".source = ../../config/matugen/hypr-colors.lua;
+        ".config/matugen/templates/rofi-colors.rasi".source = ../../config/matugen/rofi-colors.rasi;
 
         ".config/wezterm/wezterm.lua".source = weztermLua;
 
