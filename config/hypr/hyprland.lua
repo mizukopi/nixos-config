@@ -11,7 +11,9 @@
 
 -- détecte la machine via /etc/hostname pour les réglages per-host
 local hostname = io.open("/etc/hostname"):read("*l")
-local theme = require("hypr-theme")
+-- bordures : couleurs extraites du fond d ecran par matugen (config/matugen/), sinon theme.nix
+local ok, wallTheme = pcall(dofile, os.getenv("HOME") .. "/.config/hypr/matugen-colors.lua")
+local theme = ok and wallTheme or require("hypr-theme")
 
 -- scale moniteur : adapté à l'écran de chaque machine
 local monitorScale = hostname == "games" and 1.0 or 1.8

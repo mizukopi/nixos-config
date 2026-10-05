@@ -1,0 +1,10 @@
+# matugen : lance par wayle (theme-provider = "matugen") sur le fond d ecran.
+# pas de section [config.wallpaper] : c est wayle + awww qui posent le fond.
+[config]
+
+# couleurs des bordures hyprland
+[templates.hyprland]
+input_path = "/home/paul/.config/matugen/templates/hypr-colors.lua"
+output_path = "/home/paul/.config/hypr/matugen-colors.lua"
+# applique aussi les couleurs tout de suite, sans reconnexion (hyprctl eval = lua en direct)
+post_hook = '''hyprctl eval 'hl.config({ general = { col = { active_border = { colors = { "rgb({{ colors.primary.default.hex_stripped }})" }, angle = 45 }, inactive_border = "rgb({{ colors.surface_container.default.hex_stripped }})" } } })' '''

@@ -138,6 +138,9 @@ in
         ".config/hypr/hypridle.conf".source = ../../config/hypr/hypridle.conf;
         ".config/hypr/wallpaper.png".source = desktopWallpaper;
 
+        ".config/matugen/config.toml".source = ../../config/matugen/config.toml;
+        ".config/matugen/templates/hypr-colors.lua".source = ../../config/matugen/hypr-colors.lua;
+
         ".config/wezterm/wezterm.lua".source = weztermLua;
 
         ".config/fastfetch/config.jsonc".source = ../../config/fastfetch/config.jsonc;
