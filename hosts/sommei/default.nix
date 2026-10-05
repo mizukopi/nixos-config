@@ -22,6 +22,13 @@ in
     "nix-command"
     "flakes"
   ];
+  # nettoyage du store via launchd : gc le dimanche 3h15, optimise 4h15
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 7d";
+  };
+  nix.optimise.automatic = true;
+
   system.primaryUser = "user";
   system.stateVersion = 5;
 
