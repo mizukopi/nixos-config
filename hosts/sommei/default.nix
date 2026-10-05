@@ -34,6 +34,8 @@ in
 
   # touch id for sudo
   security.pam.services.sudo_local.touchIdAuth = true;
+  # reattach : touch id marche aussi dans tmux / cmux (detaches de la session graphique)
+  security.pam.services.sudo_local.reattach = true;
 
   # fish shell
   programs.fish.enable = true;
