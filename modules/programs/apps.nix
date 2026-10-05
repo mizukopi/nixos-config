@@ -18,6 +18,8 @@
     nushell
     ente-auth
     gajim
+    mumble # chat vocal
+    mumble # chat vocal
     signal-desktop
     equibop
     wezterm
