@@ -80,7 +80,6 @@ subset of tools differ.
 | `hjem` | dotfile symlinks |
 | `nix-homebrew` | installs and pins homebrew itself on `sommei` |
 | `spicetify-nix` | patched spotify on `games` |
-| `zen-browser` | zen browser on the nixos hosts (not in nixpkgs, community flake) |
 | `treefmt-nix` | formatter + `nix flake check` gate |
 
 every input that has a `nixpkgs` or `nix-darwin` input follows ours, so there is

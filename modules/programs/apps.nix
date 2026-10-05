@@ -1,6 +1,6 @@
 # module: programs/apps
 # general graphical apps (browser, file manager, media, terminals, editors, chat)
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -17,8 +17,6 @@
     obs-studio
     nushell
     ente-auth
-    # zen absent de nixpkgs : flake communautaire (binaire officiel de zen, repackage)
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     gajim
     signal-desktop
     equibop
@@ -29,8 +27,6 @@
     kdePackages.qttools
     kdePackages.kdenlive
   ];
-
-  programs.firefox.enable = true;
 
   # file type (mime) → default application associations
   xdg.mime.defaultApplications = {
