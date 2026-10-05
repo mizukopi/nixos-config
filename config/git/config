@@ -8,3 +8,12 @@
     rebase = true
 [push]
     autoSetupRemote = true
+
+[gpg]
+    format = ssh
+[user]
+    signingkey = ~/.ssh/id_ed25519.pub
+[commit]
+    gpgsign = true
+[tag]
+    gpgsign = true
