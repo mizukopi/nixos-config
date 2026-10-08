@@ -413,3 +413,9 @@ hl.window_rule({
     match     = { class = "^(org.gajim.Gajim)$" },
     workspace = "3 silent",
 })
+
+hl.window_rule({
+    name      = "assign-signal-workspace",
+    match     = { class = "^([Ss]ignal)$" },
+    workspace = "3 silent",
+})
