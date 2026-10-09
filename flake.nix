@@ -16,6 +16,9 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # pas de follows ici : le cache kopuz.cachix.org ne contient que les binaires
+    # construits avec leur nixpkgs. suivre le notre = tout recompiler en local
+    kopuz.url = "github:Kopuz-org/kopuz";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -1,6 +1,6 @@
 # module: programs/apps
 # general graphical apps (browser, file manager, media, terminals, editors, chat)
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -27,6 +27,8 @@
     kdePackages.kate
     kdePackages.qttools
     kdePackages.kdenlive
+    # kopuz : lecteur de musique, pas dans nixpkgs -> paquet fourni par son propre flake
+    inputs.kopuz.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # file type (mime) → default application associations

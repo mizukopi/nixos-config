@@ -38,6 +38,12 @@
       "flakes"
     ];
     auto-optimise-store = true;
+    # cache binaire de kopuz : telecharge le paquet deja compile au lieu de le
+    # compiler (rust, long). la cle verifie que les binaires viennent bien de kopuz
+    substituters = [ "https://kopuz.cachix.org" ];
+    trusted-public-keys = [
+      "kopuz.cachix.org-1:J2X3AnAYhKTJW5S3aCLoA1ckonQXVNZMQvhZA0YAufw="
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
