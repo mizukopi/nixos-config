@@ -66,6 +66,8 @@ in
   homebrew = {
     enable = true;
     onActivation.cleanup = "uninstall";
+    # depot tiers (tap) de kopuz : son cask n est pas dans homebrew officiel
+    taps = [ "kopuz-org/tap" ];
     brews = [
       "bash"
       "handbrake"
@@ -94,6 +96,9 @@ in
       "android-commandlinetools"
       "godot"
       "temurin@17"
+      # lecteur de musique. sur macos, le cask s installe dans /Applications ;
+      # le paquet nix, lui, ne fournit pas de .app visible dans le launchpad
+      "kopuz-org/tap/kopuz"
     ];
   };
 
