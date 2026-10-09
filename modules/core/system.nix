@@ -24,19 +24,17 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # automatic garbage collection
+  # dates/persistent : options systemd, retirees sur nix-darwin.
+  # automatic et options sont dans modules/shared/nix.nix.
   nix.gc = {
-    automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 7d";
     persistent = true;
   };
 
+  # auto-optimise-store est volontairement nixos-only : sur darwin l option
+  # peut corrompre le store, sommei utilise nix.optimise.automatic a la place.
+  # le cache kopuz reste aussi nixos-only (le paquet kopuz de sommei vient de homebrew).
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
     auto-optimise-store = true;
     # cache binaire de kopuz : telecharge le paquet deja compile au lieu de le
     # compiler (rust, long). la cle verifie que les binaires viennent bien de kopuz
@@ -45,8 +43,6 @@
       "kopuz.cachix.org-1:J2X3AnAYhKTJW5S3aCLoA1ckonQXVNZMQvhZA0YAufw="
     ];
   };
-
-  nixpkgs.config.allowUnfree = true;
 
   # swap compressé en ram (zram) : filet de sécurité quand la ram est pleine, zéro écriture disque
   zramSwap.enable = true;

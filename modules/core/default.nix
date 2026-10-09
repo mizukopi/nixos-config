@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ../shared/nix.nix
     ./system.nix
     ./networking.nix
     ./users.nix

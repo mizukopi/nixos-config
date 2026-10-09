@@ -16,17 +16,13 @@ let
   '';
 in
 {
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
+  imports = [
+    ../../modules/shared/nix.nix
   ];
-  # nettoyage du store via launchd : gc le dimanche 3h15, optimise 4h15
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 7d";
-  };
+
+  nixpkgs.hostPlatform = "aarch64-darwin";
+  # optimisation du store via launchd. le gc (dimanche 3h15) vient du module
+  # partage ; ici seulement l optimise, defaut dimanche 4h15.
   nix.optimise.automatic = true;
 
   system.primaryUser = "user";
