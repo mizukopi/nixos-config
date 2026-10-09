@@ -90,6 +90,10 @@ in
       "hopper-disassembler"
       "handbrake-app"
       "zen"
+      # installes a la main avant, retires par cleanup = "uninstall" : declares ici
+      "android-commandlinetools"
+      "godot"
+      "temurin@17"
     ];
   };
 
