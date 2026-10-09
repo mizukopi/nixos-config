@@ -77,6 +77,7 @@ in
       "vesktop"
       "font-jetbrains-mono-nerd-font"
       "gstreamer-runtime"
+      "grok-bot"
       "knockknock"
       "marta"
       "monal"
