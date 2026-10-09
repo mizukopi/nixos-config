@@ -28,6 +28,8 @@
     kdePackages.kdenlive
     # kopuz : lecteur de musique, pas dans nixpkgs -> paquet fourni par son propre flake
     inputs.kopuz.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # grok-bot : hors nixpkgs, appimage epingle dans pkgs/grok-bot.nix
+    (callPackage ../../pkgs/grok-bot.nix { })
   ];
 
   # file type (mime) → default application associations
