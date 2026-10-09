@@ -19,9 +19,6 @@
 
   fyrr.wayle.configFile = ../../config/wayle/config-navi.toml;
 
-  # laptop power management
-  powerManagement.enable = true;
-
   # upower : etat de la batterie pour les autres programmes (module battery de wayle)
   services.upower.enable = true;
   # profils d energie (economie / equilibre / performance) : powerprofilesctl
