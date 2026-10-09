@@ -47,6 +47,19 @@
       treefmtEval = forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
+      # seul specialArgs est commun aux 3 hosts. les modules supplementaires
+      # (hjem nixos vs darwin, nix-homebrew) restent passes par l appelant.
+      mkHost =
+        {
+          builder,
+          modules,
+        }:
+        builder {
+          specialArgs = {
+            inherit inputs theme;
+          };
+          inherit modules;
+        };
     in
     {
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
@@ -73,24 +86,25 @@
         }
       );
 
-      nixosConfigurations.navi = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs theme; };
-        modules = [
-          ./hosts/navi/default.nix
-          hjem.nixosModules.default
-        ];
+      nixosConfigurations = {
+        navi = mkHost {
+          builder = nixpkgs.lib.nixosSystem;
+          modules = [
+            ./hosts/navi/default.nix
+            hjem.nixosModules.default
+          ];
+        };
+        games = mkHost {
+          builder = nixpkgs.lib.nixosSystem;
+          modules = [
+            ./hosts/games/default.nix
+            hjem.nixosModules.default
+          ];
+        };
       };
 
-      nixosConfigurations.games = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs theme; };
-        modules = [
-          ./hosts/games/default.nix
-          hjem.nixosModules.default
-        ];
-      };
-
-      darwinConfigurations.sommei = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs theme; };
+      darwinConfigurations.sommei = mkHost {
+        builder = nix-darwin.lib.darwinSystem;
         modules = [
           ./hosts/sommei/default.nix
           hjem.darwinModules.default
