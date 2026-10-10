@@ -40,6 +40,7 @@
       nix-darwin,
       nix-homebrew,
       treefmt-nix,
+      sops-nix,
       ...
     }:
     let
@@ -51,18 +52,29 @@
       treefmtEval = forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
-      # seul specialArgs est commun aux 3 hosts. les modules supplementaires
-      # (hjem nixos vs darwin, nix-homebrew) restent passes par l appelant.
+      # specialArgs et sops-nix sont communs aux 3 hosts. le module nixos ou
+      # darwin est choisi ici ; les autres modules restent passes par l appelant.
+      # pas de sshd : une cle age par hote, jamais les cles d hote SSH.
+      # le module darwin documente le meme sops.age.keyFile que nixos.
       mkHost =
         {
           builder,
           modules,
+          darwin ? false,
         }:
         builder {
           specialArgs = {
             inherit inputs theme;
           };
-          inherit modules;
+          modules = [
+            (if darwin then sops-nix.darwinModules.sops else sops-nix.nixosModules.sops)
+            {
+              sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+              sops.age.sshKeyPaths = [ ];
+              sops.gnupg.sshKeyPaths = [ ];
+            }
+          ]
+          ++ modules;
         };
     in
     {
@@ -85,6 +97,9 @@
               statix
               deadnix
               just
+              sops
+              age
+              ssh-to-age
             ];
           };
         }
@@ -109,6 +124,7 @@
 
       darwinConfigurations.sommei = mkHost {
         builder = nix-darwin.lib.darwinSystem;
+        darwin = true;
         modules = [
           ./hosts/sommei/default.nix
           hjem.darwinModules.default
