@@ -2,7 +2,7 @@
 
 Les secrets ne vont pas dans le dépôt en clair. [sops-nix](https://github.com/Mic92/sops-nix) les chiffre avec [sops](https://github.com/getsops/sops) et age. Le fichier chiffré (`secrets/*.yaml`) peut être commité ; seule une clé privée age correspondante peut le lire.
 
-Le module est branché sur les trois hôtes : `navi` et `games` (`nixosModules.sops`) et `sommei` (`darwinModules.sops`). Aucun secret n'est déclaré, et `sops.defaultSopsFile` n'est pas fixé : l'évaluation passe sans fichier chiffré. Le shell de dev (`nix develop`) fournit `sops`, `age`, et `ssh-to-age` (facultatif, pour dériver une clé age d'une clé SSH).
+Le module est branché sur les trois hôtes : `navi` et `games` (`nixosModules.sops`) et `sommei` (`darwinModules.sops`). La configuration (clé d'hôte, pas de clés SSH) est dans `modules/shared/sops.nix`. Aucun secret n'est déclaré, et `sops.defaultSopsFile` n'est pas fixé : l'évaluation passe sans fichier chiffré. Le shell de dev (`nix develop`) fournit `sops`, `age`, et `ssh-to-age` (facultatif, pour dériver une clé age d'une clé SSH).
 
 Ces machines n'ont pas sshd. sops-nix ne doit pas chercher de clé d'hôte SSH : `sops.age.sshKeyPaths` et `sops.gnupg.sshKeyPaths` sont vides. Chaque hôte a sa propre clé age.
 
@@ -31,13 +31,9 @@ age-keygen -o ~/.config/sops/age/keys.txt
 age-keygen -y ~/.config/sops/age/keys.txt
 ```
 
-Coller la clé publique à la place de `TODO_USER` dans `.sops.yaml`.
+Coller la clé publique à la place de `TODO_USER` dans `.sops.yaml`. Sauvegarder `keys.txt` hors de la machine : sans elle, un secret n'est récupérable que si une clé d'hôte destinataire existe encore.
 
-Sur macOS, sops cherche par défaut `~/Library/Application Support/sops/age/keys.txt`. Pour utiliser le même fichier :
-
-```sh
-export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
-```
+`SOPS_AGE_KEY_FILE` vaut `~/.config/sops/age/keys.txt` pour la session de l'utilisateur, sans export manuel. Sur NixOS c'est `environment.sessionVariables` : PAM la pose avant le shell, donc nushell la voit. Sur darwin c'est `environment.variables`, sourcé par fish au démarrage (`/etc/fish/nixos-env-preinit.fish`). sops ne tombe donc pas sur `~/Library/Application Support/sops/age/keys.txt`.
 
 ## Éditer un secret
 
