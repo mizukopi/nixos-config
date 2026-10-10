@@ -115,3 +115,5 @@ sops updatekeys secrets/foo.yaml
 Répéter pour chaque fichier que cet hôte doit lire. Commiter, puis reconstruire (`just switch`). L'ancienne clé d'hôte ne déchiffre plus ces fichiers.
 
 Un autre hôte dont la clé est encore destinataire peut lancer `sops updatekeys` si la clé utilisateur manque. Si plus aucune clé privée destinataire ne reste, le secret est perdu.
+
+`sops updatekeys` ne change que les destinataires. La clé de données du fichier reste la même, et les anciennes versions dans l'historique git sont toujours déchiffrables avec une clé qui l'était déjà. Une clé perdue (réinstallation) : ça suffit. Une clé volée, par exemple un portable volé : lancer `sops rotate -i` sur chaque fichier de secret pour changer la clé de données, et surtout changer les secrets eux-mêmes (mots de passe, tokens). La rotation n'efface pas l'historique.
