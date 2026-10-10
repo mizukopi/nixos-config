@@ -58,6 +58,7 @@ nixos-config/
 │   ├── games/{default,hardware}.nix
 │   └── sommei/default.nix
 ├── modules/
+│   ├── shared/            # nix settings + sops age key (nixos and darwin)
 │   ├── core/              # boot, locale, nix daemon, zram, networking, users (no gui)
 │   ├── desktop/           # hyprland, sddm, audio, fonts, cursor, printing, hjem
 │   ├── hardware/          # intel, nvidia, bluetooth
@@ -183,6 +184,7 @@ a fresh install brings back the config, not this. redo it by hand:
 | wayle gui tweaks | `~/.config/wayle/runtime.toml` | copy what is worth keeping into `config/wayle/config-<host>.toml` |
 | ssh keys | `~/.ssh` | regenerate and add to github |
 | sops age host key | `/var/lib/sops-nix/key.txt` | `age-keygen` as root; see `docs/secrets.md` |
+| sops age user key | `~/.config/sops/age/keys.txt` | `age-keygen`; back it up off-machine — losing it makes secrets unrecoverable unless a host key remains |
 | mumble audio backend (nixos) | `~/.config/Mumble/Mumble/mumble_settings.json` | input/output system = `PulseAudio`, otherwise mumble 1.5 gets SIGKILLed with pipewire >= 1.4 |
 | game prefixes | `~/Games`, steam library | reinstall from steam / lutris |
 
