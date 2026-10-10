@@ -37,7 +37,7 @@ Coller la clé publique à la place de `TODO_USER` dans `.sops.yaml`. Sauvegarde
 
 ## Éditer un secret
 
-`.sops.yaml` chiffre tout fichier qui matche `secrets/*.yaml` pour l'utilisateur et les trois hôtes. Remplacer les `TODO` avant le premier appel, sinon sops refuse le destinataire.
+`.sops.yaml` a une seule règle : tout fichier qui matche `secrets/*.yaml` est chiffré pour l'utilisateur et les trois hôtes. Aujourd'hui, chaque hôte peut donc déchiffrer tous les secrets. Remplacer les `TODO` avant le premier appel, sinon sops refuse le destinataire.
 
 ```sh
 sops secrets/foo.yaml
@@ -59,6 +59,28 @@ Depuis la racine. sops ouvre le clair dans `$EDITOR`. Ajouter le fichier à git.
 
 `config.sops.secrets."foo".path` est le chemin à passer à une option qui attend un fichier. Le contenu n'est pas dans le store.
 
+## Limiter un secret à un hôte
+
+sops prend la première `creation_rules` dont le `path_regex` matche. La règle générale reste en dernier. Une règle plus spécifique, placée avant, ne donne la clé qu'à l'hôte concerné :
+
+```yaml
+creation_rules:
+  - path_regex: secrets/navi/.*\.yaml$
+    key_groups:
+      - age:
+          - *user
+          - *navi
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *user
+          - *navi
+          - *games
+          - *sommei
+```
+
+`secrets/navi/foo.yaml` n'est alors lisible que par l'utilisateur et navi. `secrets/games/` et `secrets/sommei/` se font de la même façon. Tant que ces règles n'y sont pas, la règle unique s'applique à tout `secrets/*.yaml`.
+
 ## Ajouter un destinataire
 
 Après avoir ajouté une clé publique dans `.sops.yaml` :
@@ -72,3 +94,24 @@ sops réécrit le fichier pour les destinataires de la règle. Il faut encore un
 ## Si le secret est déclaré avant la clé
 
 Déclarer `sops.secrets."foo"` alors que `/var/lib/sops-nix/key.txt` n'existe pas encore, ou que sa clé publique n'est pas destinataire du fichier, fait échouer l'activation : `sops-install-secrets` ne peut pas déchiffrer, le script d'activation s'arrête, et `nixos-rebuild switch` ou `darwin-rebuild switch` ne bascule pas sur cette génération. Créer la clé d'hôte et l'ajouter aux destinataires avant de déclarer le secret.
+
+## Réinstaller un hôte sans sa clé
+
+Si `/var/lib/sops-nix/key.txt` a disparu et que la clé utilisateur est encore là :
+
+```sh
+sudo mkdir -p /var/lib/sops-nix
+sudo age-keygen -o /var/lib/sops-nix/key.txt
+sudo chmod 600 /var/lib/sops-nix/key.txt
+sudo age-keygen -y /var/lib/sops-nix/key.txt
+```
+
+Remplacer le destinataire de cet hôte dans `.sops.yaml` par la nouvelle clé publique. Puis, avec la clé utilisateur :
+
+```sh
+sops updatekeys secrets/foo.yaml
+```
+
+Répéter pour chaque fichier que cet hôte doit lire. Commiter, puis reconstruire (`just switch`). L'ancienne clé d'hôte ne déchiffre plus ces fichiers.
+
+Un autre hôte dont la clé est encore destinataire peut lancer `sops updatekeys` si la clé utilisateur manque. Si plus aucune clé privée destinataire ne reste, le secret est perdu.
