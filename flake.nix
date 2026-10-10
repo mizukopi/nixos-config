@@ -94,7 +94,6 @@
               just
               sops
               age
-              ssh-to-age
             ];
           };
         }

@@ -2,7 +2,7 @@
 
 Les secrets ne vont pas dans le dépôt en clair. [sops-nix](https://github.com/Mic92/sops-nix) les chiffre avec [sops](https://github.com/getsops/sops) et age. Le fichier chiffré (`secrets/*.yaml`) peut être commité ; seule une clé privée age correspondante peut le lire.
 
-Le module est branché sur les trois hôtes : `navi` et `games` (`nixosModules.sops`) et `sommei` (`darwinModules.sops`). La configuration (clé d'hôte, pas de clés SSH) est dans `modules/shared/sops.nix`. Aucun secret n'est déclaré, et `sops.defaultSopsFile` n'est pas fixé : l'évaluation passe sans fichier chiffré. Le shell de dev (`nix develop`) fournit `sops`, `age`, et `ssh-to-age` (facultatif, pour dériver une clé age d'une clé SSH).
+Le module est branché sur les trois hôtes : `navi` et `games` (`nixosModules.sops`) et `sommei` (`darwinModules.sops`). La configuration (clé d'hôte, pas de clés SSH) est dans `modules/shared/sops.nix`. Aucun secret n'est déclaré, et `sops.defaultSopsFile` n'est pas fixé : l'évaluation passe sans fichier chiffré. Le shell de dev (`nix develop`) fournit `sops` et `age`.
 
 Ces machines n'ont pas sshd. sops-nix ne doit pas chercher de clé d'hôte SSH : `sops.age.sshKeyPaths` et `sops.gnupg.sshKeyPaths` sont vides. Chaque hôte a sa propre clé age.
 
