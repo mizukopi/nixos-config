@@ -47,10 +47,12 @@ that nix handles poorly on mac.
 nixos-config/
 ├── flake.nix              # inputs + declares navi, games, sommei
 ├── flake.lock
+├── .sops.yaml             # sops-nix age recipients (placeholders) + creation rules
 ├── justfile               # task runner: switch, build, fmt, lint, check, update
 ├── theme.nix              # colour palette, single source for the whole theme
 ├── treefmt.nix            # formatter config (nixfmt)
 ├── statix.toml            # linter exclusions
+├── docs/secrets.md        # sops-nix workflow, in French
 ├── hosts/
 │   ├── navi/{default,hardware}.nix
 │   ├── games/{default,hardware}.nix
@@ -81,9 +83,10 @@ subset of tools differ.
 | `nix-homebrew` | installs and pins homebrew itself on `sommei` |
 | `spicetify-nix` | patched spotify on `games` |
 | `treefmt-nix` | formatter + `nix flake check` gate |
+| `sops-nix` | age-encrypted secrets on every host; `sops` and `age` in the dev shell |
 
 every input that has a `nixpkgs` or `nix-darwin` input follows ours, so there is
-a single copy of each in the lock.
+a single copy of each in the lock. sops-nix follows `nixpkgs`.
 
 ## theming
 
@@ -164,8 +167,9 @@ systemd-boot menu.
 nix develop
 ```
 
-gives `nixd` (language server), `nixfmt`, `statix`, `deadnix` and `just` without
-installing them system-wide.
+gives `nixd` (language server), `nixfmt`, `statix`, `deadnix`, `just`, `sops`,
+`age` and `ssh-to-age` without installing them system-wide. secret editing is
+documented in `docs/secrets.md` (in French). sops-nix is the secrets approach.
 
 ## state that nix does not manage
 
@@ -178,6 +182,7 @@ a fresh install brings back the config, not this. redo it by hand:
 | windows clock (`games` dual boot) | windows registry | `RealTimeIsUniversal = 1` so both os read the rtc as utc |
 | wayle gui tweaks | `~/.config/wayle/runtime.toml` | copy what is worth keeping into `config/wayle/config-<host>.toml` |
 | ssh keys | `~/.ssh` | regenerate and add to github |
+| sops age host key | `/var/lib/sops-nix/key.txt` | `age-keygen` as root; see `docs/secrets.md` |
 | mumble audio backend (nixos) | `~/.config/Mumble/Mumble/mumble_settings.json` | input/output system = `PulseAudio`, otherwise mumble 1.5 gets SIGKILLed with pipewire >= 1.4 |
 | game prefixes | `~/Games`, steam library | reinstall from steam / lutris |
 
@@ -248,7 +253,7 @@ a fresh install brings back the config, not this. redo it by hand:
 
 ## known gaps
 
-- **no secrets management.** sops-nix is the intended fix.
+- **sops-nix is the chosen secrets approach.** it is wired on all three hosts, but no secret is defined yet. age recipients in `.sops.yaml` are still placeholders. workflow: `docs/secrets.md`.
 - **`just check` evaluates the hosts but does not build them**: a wrong option
   or a typo fails, a package that fails to compile still passes.
 - **theming is only half declarative.** kitty, rofi, spicetify and wayle still
