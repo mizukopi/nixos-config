@@ -167,8 +167,8 @@ systemd-boot menu.
 nix develop
 ```
 
-gives `nixd` (language server), `nixfmt`, `statix`, `deadnix`, `just`, `sops`,
-`age` and `ssh-to-age` without installing them system-wide. secret editing is
+gives `nixd` (language server), `nixfmt`, `statix`, `deadnix`, `just`, `sops`
+and `age` without installing them system-wide. secret editing is
 documented in `docs/secrets.md` (in French). sops-nix is the secrets approach.
 
 ## state that nix does not manage
